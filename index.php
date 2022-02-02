@@ -1,5 +1,18 @@
 <!DOCTYPE html>
-<?php include_once 'functions.php'?>
+<?php 
+    include_once 'functions.php';
+    $lsnguage = array("PHP", "Java", "Javascript", "Python", "C++");
+
+    $fileType = array("image/png", "image/jpg", "image/jpeg");
+    $file = $_FILES['photo']?? [];
+    if($file ){
+        if(in_array($_FILES['photo']['type'], $fileType) && $_FILES['photo']['size']<5*1024*1024 ){
+            move_uploaded_file($_FILES['photo']['tmp_name'], "images/".$_FILES['photo']['name']);
+        }
+        
+    }
+    
+?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,6 +35,94 @@
                         <h1>Hello Welcome To Our Website</h1>
                         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum facilis aliquam reiciendis enim voluptate quasi similique assumenda facere expedita voluptates! Cum facilis aliquam reiciendis enim voluptate quasi similique assumenda facere expedita voluptates!</p>
                     </div>
+                    <div class="output">
+                        <?php 
+                            $fname = '';
+                            $lname = '';
+                            $checked = '';
+                            if(isset($_POST['fname']) && !empty(isset($_POST['fname']))){
+                                //$fname = htmlspecialchars($_GET['fname']);
+                                $fname = filter_input(INPUT_POST, 'fname', FILTER_SANITIZE_STRING);
+                            }
+                            if(isset($_POST['lname']) && !empty(isset($_POST['lname']))){
+                                //$lname = htmlspecialchars($_GET['lname']);
+                                $lname = filter_input( INPUT_POST, 'lname', FILTER_SANITIZE_STRING);
+                            }
+                            if(isset($_POST['lname']) && !empty(isset($_POST['lname']))){
+                                //$lname = htmlspecialchars($_GET['lname']);
+                                $lname = filter_input( INPUT_POST, 'lname', FILTER_SANITIZE_STRING);
+                            }
+                            if(isset($_POST['ckb']) && $_POST['ckb'] == 1){
+                                $checked = 'checked';
+                            }
+
+                            $slanguage = $_POST['language']?? array();
+                        ?>
+
+                        <?php
+                        if(!empty($_POST['fname']) || !empty($_POST['lname']) ){
+                            printf("First Name: %s %s Last Name: %s" , $fname, "</br>", $lname );
+                        }
+                           
+                        ?>
+                    </div>
+
+                    <pre>
+                        <p>
+                        <?php
+                                print_r($_POST);
+                                print_r($_FILES);
+                            ?>
+                        </p>
+
+                    </pre>
+                    <hr>
+                    <form method="POST" enctype="multipart/form-data" >
+                        <label for="fname">First Name</label>
+                        <input class="form-control" type="text" name="fname" id="fname" value="<?php echo $fname?>">
+                        <br>
+                        <label  for="lname">Last Name</label>
+                        <input class="form-control" type="text" name="lname" id="lname" value="<?php echo $lname?>">
+                        <br>
+                        <p>
+                            <input type="checkbox" name="ckb" id="ckb" value="1" <?php echo $checked; ?>>
+                            <label for="ckb">You can check</label>
+                        </p>
+
+                        <p>
+                            <label for="image">Upload Profile Photo</label>
+                            <input type="file" name="photo" id="image">
+                        </p>
+
+                        <label>Select your Expertist</label>
+
+                        <p>
+                            <input type="checkbox" name="skills[]" id="html" value="html" <?php isChecked('skills', 'html' ); ?>>
+                            <label for="html">HTML</label></br>
+                            <input type="checkbox" name="skills[]" id="css" value="css" <?php isChecked('skills', 'css' ); ?>>
+                            <label for="css">CSS</label></br>
+                            <input type="checkbox" name="skills[]" id="php" value="php" <?php isChecked('skills', 'php' ); ?>>
+                            <label for="php">PHP</label></br>
+                            <input type="checkbox" name="skills[]" id="javascript" value="javascript" <?php isChecked('skills', 'javascript' ); ?>>
+                            <label for="javascript">Javascript</label></br>
+                            <input type="checkbox" name="skills[]" id="laravel" value="laravel" <?php isChecked('skills', 'laravel' ); ?>>
+                            <label for="laravel">Laravel</label></br>
+                        </p>
+
+                        <p>
+                            <select  class="form-control" name="language[]" id="language" multiple>
+                                <option value="">Select Your Programming langauge</option>
+                                <?php 
+                                    selectPption($lsnguage, $slanguage );
+                                ?>
+                            </select>
+                        </p>
+                        
+                        <input class="btn btn-primary" type="submit" value="Submit">    
+                        <br>
+                        <br>
+                        <br>
+                    </form>
                     <div>
                 </div>
             </div>
